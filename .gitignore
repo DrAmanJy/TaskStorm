@@ -47,19 +47,13 @@ temp/
 *.tmp
 *.bak
 
-# Mac files
-.AppleDouble
-.LSOverride
 
 # Windows files
 ehthumbs.db
 Icon?
 Desktop.ini
 
-# Linux package files
-*.snap
-*.deb
-*.rpm
+
 
 # Other common ignores
 *.env.local

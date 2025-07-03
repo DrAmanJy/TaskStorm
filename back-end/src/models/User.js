@@ -18,6 +18,17 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
     },
+    projects: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "project",
+      },
+    ],
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
   { timestamps: true, versionKey: false }
 );
