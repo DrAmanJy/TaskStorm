@@ -6,14 +6,23 @@ export const getProject = async (req, res) => {
   if (projects.length === 0) {
     return res.status(404).json({ message: "project not found" });
   }
-  res.json(projects);
+  res.json({ success: true, projects });
+};
+export const getProjectById = async (req, res) => {
+  const project = await Project.findById(req.params.id);
+  if (!project) {
+    return res.status(404).json({ message: "project not found" });
+  }
+  res.json({ success: true, project });
 };
 export const createProject = async (req, res) => {
   const { name, description } = req.body;
   const userId = req.user._id;
   const project = await Project.create({ name, description, owner: userId });
   await User.findByIdAndUpdate(userId, { $push: { projects: project._id } });
-  res.status(200).json({ message: "project successfully  created", project });
+  res
+    .status(200)
+    .json({ message: "project successfully  created", success: true, project });
 };
 export const updateProject = async (req, res) => {
   const { name, description, projectId } = req.body;
@@ -30,7 +39,9 @@ export const updateProject = async (req, res) => {
   }
   project.$set({ name, description });
   await project.save();
-  res.status(200).json({ message: "project successfully updated" });
+  res
+    .status(200)
+    .json({ success: true, message: "project successfully updated" });
 };
 export const deleteProject = async (req, res) => {
   const { projectId } = req.body;

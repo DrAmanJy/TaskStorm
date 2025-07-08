@@ -20,17 +20,6 @@ const taskSchema = new mongoose.Schema(
       default: "pending",
     },
 
-    priority: {
-      type: String,
-      enum: ["low", "medium", "high"],
-      default: "low",
-    },
-
-    dueDate: {
-      type: Date,
-      default: null,
-    },
-
     project: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "project",
@@ -43,12 +32,6 @@ const taskSchema = new mongoose.Schema(
       required: true,
     },
 
-    assignedTo: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
-      default: null,
-    },
-
     subTasks: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -56,18 +39,7 @@ const taskSchema = new mongoose.Schema(
       },
     ],
 
-    parentTask: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "task",
-      default: null,
-    },
-
     isCompleted: {
-      type: Boolean,
-      default: false,
-    },
-
-    isDeleted: {
       type: Boolean,
       default: false,
     },

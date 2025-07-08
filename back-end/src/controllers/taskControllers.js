@@ -1,4 +1,5 @@
 import Project from "../models/Project.js";
+import SubTask from "../models/subTask.js";
 import Task from "../models/Task.js";
 
 export const getTasks = async (req, res) => {
@@ -16,13 +17,13 @@ export const getTasks = async (req, res) => {
   }
   const tasks = await Task.find({ project: projectId });
   if (tasks.length === 0) {
-    return res.status(404).json({ message: "task not found" });
+    return res.json({ success: true, tasks: null });
   }
-  res.json({ tasks });
+  res.json({ success: true, tasks });
 };
 export const addTasks = async (req, res) => {
-  const { title, description, projectId } = req.body;
-  const project = await Project.findById(projectId);
+  const { taskName, taskDescription, subtasks } = req.body;
+  const project = await Project.findById(req.params.id);
   if (!project) {
     return res.status(404).json({ message: "Project not found" });
   }
@@ -32,12 +33,28 @@ export const addTasks = async (req, res) => {
       .json({ message: "Access denied: Only owner can add task" });
   }
   const newTask = await Task.create({
-    title,
-    description,
-    project: project._id,
+    title: taskName,
+    description: taskDescription,
+    project: req.params.id,
     createdBy: req.user._id,
   });
-  res.status(200).json({ message: "Task created successfully", newTask });
+  if (Array.isArray(subtasks)) {
+    await Promise.all(
+      subtasks.map((subtask) =>
+        SubTask.create({
+          title: subtask.title,
+          description: subtask.descriptions,
+          priority: subtask.priority,
+          deadline: subtask.deadline,
+          task: newTask._id,
+          createdBy: req.user._id,
+        })
+      )
+    );
+  }
+  res
+    .status(200)
+    .json({ success: true, message: "Task created successfully", newTask });
 };
 export const updateTasks = async (req, res) => {
   const { title, description, projectId, taskId } = req.body;

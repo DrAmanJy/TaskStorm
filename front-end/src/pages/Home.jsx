@@ -1,31 +1,46 @@
 import { RocketIcon, CheckCircle2Icon, UsersIcon } from "lucide-react";
 import NeonCard from "../components/NeonCard";
+import { useUser } from "../context/UserContext";
+import { Link } from "react-router";
+import { useState } from "react";
 
 const Home = () => {
+  const { user } = useUser();
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100">
       <header className="bg-gray-950 shadow-md sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center justify-between">
           <h1 className="text-2xl font-bold text-cyan-400 ">TaskStorm</h1>
           <nav className="space-x-4 mt-4 sm:mt-0 w-full sm:w-auto text-center">
-            <a
-              href="#features"
+            <Link
+              to="/features"
               className="text-gray-300 hover:text-cyan-400 font-medium"
             >
               Features
-            </a>
-            <a
-              href="/login"
-              className="text-gray-300 hover:text-cyan-400 font-medium"
-            >
-              Login
-            </a>
-            <a
-              href="/signup"
-              className="inline-block px-5 py-2 mt-2 sm:mt-0 rounded-full font-semibold shadow-md transition-transform bg-cyan-700 text-white border border-transparent hover:scale-105 hover:bg-cyan-500"
-            >
-              Get Started
-            </a>
+            </Link>
+            {user && (
+              <button
+                to="/features"
+                className="text-gray-300 hover:text-cyan-400 font-medium"
+              >
+                Logout
+              </button>
+            )}
+            {user ? (
+              <Link
+                to="/dashboard"
+                className="inline-block px-5 py-2 mt-2 sm:mt-0 rounded-full font-semibold shadow-md transition-transform bg-cyan-700 text-white border border-transparent hover:scale-105 hover:bg-cyan-500"
+              >
+                Get Started
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="inline-block px-5 py-2 mt-2 sm:mt-0 rounded-full font-semibold shadow-md transition-transform bg-cyan-700 text-white border border-transparent hover:scale-105 hover:bg-cyan-500"
+              >
+                Login
+              </Link>
+            )}
           </nav>
         </div>
       </header>
@@ -39,12 +54,12 @@ const Home = () => {
             TaskStorm helps teams break down big projects into smaller tasks,
             assign members, and stay on track with an elegant, modern UI.
           </p>
-          <a
-            href="/signup"
+          <Link
+            to={user ? "/dashboard" : "/signup"}
             className="inline-block text-base sm:text-lg px-6 sm:px-8 py-2 sm:py-3 rounded-full font-semibold transition-transform bg-cyan-700 text-white hover:scale-105 hover:bg-cyan-500 shadow-md"
           >
             Start Organizing
-          </a>
+          </Link>
         </section>
 
         <section

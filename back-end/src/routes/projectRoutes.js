@@ -8,11 +8,13 @@ import {
   getProject,
   updateMember,
   updateProject,
+  getProjectById,
 } from "../controllers/projectController.js";
 import { authorized } from "../middlewares/authMiddleware.js";
 const projectRouter = express.Router();
 
 projectRouter.get("/", authorized, getProject);
+projectRouter.get("/:id", authorized, getProjectById);
 projectRouter.post("/", authorized, createProject);
 projectRouter.put("/", authorized, updateProject);
 projectRouter.delete("/", authorized, deleteProject);

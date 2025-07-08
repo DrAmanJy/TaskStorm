@@ -9,6 +9,7 @@ import taskRoutes from "./routes/taskRoutes.js";
 import connectDb from "./config/db.js";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
 import cookieParser from "cookie-parser";
+console.log(origin);
 
 const app = express();
 app.use(express.json());
