@@ -146,9 +146,12 @@ const Project = () => {
                           />
                         ))}
                       </div>
-                      <button className="inline-flex items-center gap-1 px-4 py-1 rounded-full border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-white transition-all">
+                      <Link
+                        to={`/task/${task._id}`}
+                        className="inline-flex items-center gap-1 px-4 py-1 rounded-full border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-white transition-all"
+                      >
                         <EyeIcon className="w-4 h-4" /> View
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 ))}
