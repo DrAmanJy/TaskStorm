@@ -6,6 +6,7 @@ import logger from "./middlewares/logger.js";
 import authRoutes from "./routes/authRoutes.js";
 import projectRouter from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import subTaskRoutes from "./routes/subTaskRoutes.js";
 import connectDb from "./config/db.js";
 import { errorHandler } from "./middlewares/errorMiddleware.js";
 import cookieParser from "cookie-parser";
@@ -27,6 +28,7 @@ app.use(logger);
 app.use("/api/auth", authRoutes);
 app.use("/api/project", projectRouter);
 app.use("/api/task", taskRoutes);
+app.use("/api/subtask", subTaskRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "hello world" });
