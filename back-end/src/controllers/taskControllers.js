@@ -16,45 +16,68 @@ export const getTasks = async (req, res) => {
       .json({ message: "Access denied: not a member or owner" });
   }
   const tasks = await Task.find({ project: projectId });
+
   if (tasks.length === 0) {
     return res.json({ success: true, tasks: null });
   }
-  res.json({ success: true, tasks });
+
+  const tasksWithProgress = [];
+
+  for (const task of tasks) {
+    const subTasks = await SubTask.find({ task: task._id });
+
+    const total = subTasks.length;
+    const complete = subTasks.filter((s) => s.isCompleted).length;
+    const progress = total > 0 ? (complete / total) * 100 : 0;
+
+    tasksWithProgress.push({
+      ...task.toObject(),
+      progress: Math.round(progress),
+    });
+  }
+
+  res.json({ success: true, tasks: tasksWithProgress });
 };
-export const addTasks = async (req, res) => {
+export const addTasks = async (req, res, next) => {
   const { taskName, taskDescription, subtasks } = req.body;
   const project = await Project.findById(req.params.id);
-  if (!project) {
-    return res.status(404).json({ message: "Project not found" });
-  }
-  if (project.owner.toString() !== req.user._id.toString()) {
-    return res
-      .status(403)
-      .json({ message: "Access denied: Only owner can add task" });
-  }
+
+  if (!project) return res.status(404).json({ message: "Project not found" });
+
+  if (project.owner.toString() !== req.user._id.toString())
+    return res.status(403).json({ message: "Access denied" });
+
   const newTask = await Task.create({
     title: taskName,
     description: taskDescription,
-    project: req.params.id,
+    project: project._id,
     createdBy: req.user._id,
   });
+
   if (Array.isArray(subtasks)) {
-    await Promise.all(
-      subtasks.map((subtask) =>
+    const createdSubtasks = await Promise.all(
+      subtasks.map((s) =>
         SubTask.create({
-          title: subtask.title,
-          description: subtask.descriptions,
-          priority: subtask.priority,
-          deadline: subtask.deadline,
+          title: s.title,
+          description: s.descriptions,
+          priority: s.priority,
+          deadline: s.deadline,
           task: newTask._id,
           createdBy: req.user._id,
         })
       )
     );
+
+    await Task.findByIdAndUpdate(newTask._id, {
+      $push: { subTasks: { $each: createdSubtasks.map((s) => s._id) } },
+    });
   }
-  res
-    .status(200)
-    .json({ success: true, message: "Task created successfully", newTask });
+
+  res.status(201).json({
+    success: true,
+    message: "Task and subtasks created successfully",
+    newTask,
+  });
 };
 export const updateTasks = async (req, res) => {
   const { title, description, projectId, taskId } = req.body;
