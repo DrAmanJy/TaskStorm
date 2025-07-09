@@ -32,12 +32,10 @@ const taskSchema = new mongoose.Schema(
       required: true,
     },
 
-    subTasks: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "task",
-      },
-    ],
+    subTasks: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "subtask",
+    },
 
     isCompleted: {
       type: Boolean,
