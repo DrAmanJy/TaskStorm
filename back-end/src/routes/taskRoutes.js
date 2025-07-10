@@ -3,6 +3,7 @@ import {
   addTasks,
   deleteTasks,
   getTasks,
+  setTaskCompleted,
   updateStatus,
   updateTasks,
 } from "../controllers/taskControllers.js";
@@ -14,5 +15,6 @@ taskRoutes.post("/:id", authorized, addTasks);
 taskRoutes.put("/", authorized, updateTasks);
 taskRoutes.delete("/", authorized, deleteTasks);
 taskRoutes.put("/status", authorized, updateStatus);
+taskRoutes.put("/completed/:id", authorized, setTaskCompleted);
 
 export default taskRoutes;
