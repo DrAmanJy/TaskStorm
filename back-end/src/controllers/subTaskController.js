@@ -15,17 +15,20 @@ export const getSubtask = async (req, res) => {
     subtasks.push(subTask);
     complete += subTask.isCompleted ? 1 : 0;
   }
-  const progress = (complete / task.subTasks.length) * 100;
+  const progress = Math.round((complete / task.subTasks.length) * 100);
   res.json({ success: true, progress, subtasks });
 };
 export const createSubtask = async (req, res) => {
-  const { createdBy, priority, description, title, taskId } = req.body;
+  const { priority, descriptions, title, deadline } = req.body;
+  const createdBy = req.user._id;
+  const taskId = req.params.id;
   const newSubtask = await SubTask.create({
     createdBy,
     priority,
-    description,
+    description: descriptions,
     title,
-    taskId,
+    task: taskId,
+    deadline,
   });
   await Task.findByIdAndUpdate(
     taskId,
@@ -88,6 +91,8 @@ export const setCompleted = async (req, res) => {
   if (!updatedSubtask) {
     return res.status(404).json({ message: "Subtask not found" });
   }
+
+  await Task.findByIdAndUpdate(updatedSubtask.task, { status: "in-progress" });
 
   res.status(200).json({
     message: "Subtask updated successfully",

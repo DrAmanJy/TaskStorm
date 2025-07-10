@@ -16,26 +16,28 @@ const taskSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["pending", "in-progress", "done"],
+      enum: ["pending", "in-progress", "completed"],
       default: "pending",
     },
 
     project: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "project",
+      ref: "Project",
       required: true,
     },
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
       required: true,
     },
 
-    subTasks: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "subtask",
-    },
+    subTasks: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SubTask",
+      },
+    ],
 
     isCompleted: {
       type: Boolean,
@@ -50,6 +52,6 @@ const taskSchema = new mongoose.Schema(
 
 taskSchema.index({ project: 1 });
 
-const Task = mongoose.model("task", taskSchema);
+const Task = mongoose.model("Task", taskSchema);
 
 export default Task;

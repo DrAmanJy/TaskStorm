@@ -2,7 +2,6 @@ import express from "express";
 import { port, origin, jwtSecret } from "./config/env.js";
 import cors from "cors";
 import helmet from "helmet";
-import logger from "./middlewares/logger.js";
 import authRoutes from "./routes/authRoutes.js";
 import projectRouter from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
@@ -21,9 +20,8 @@ app.use(
     credentials: true,
   })
 );
-app.use(cookieParser(jwtSecret));
+app.use(cookieParser(jwtSecret, { secure: true, sameSite: "none" }));
 app.use(helmet());
-app.use(logger);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/project", projectRouter);

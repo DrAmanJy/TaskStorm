@@ -16,27 +16,27 @@ const projectSchema = new mongoose.Schema(
 
     owner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
       required: [true, "Project must have an owner"],
     },
 
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: "User",
       },
     ],
 
     team: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "team",
+      ref: "Team",
       default: null,
     },
 
     tasks: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "task",
+        ref: "Task",
       },
     ],
 
@@ -50,6 +50,6 @@ const projectSchema = new mongoose.Schema(
   }
 );
 
-const Project = mongoose.model("project", projectSchema);
+const Project = mongoose.model("Project", projectSchema);
 
 export default Project;

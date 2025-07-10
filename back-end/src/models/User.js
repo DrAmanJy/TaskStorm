@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
     projects: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "project",
+        ref: "Project",
       },
     ],
     role: {
@@ -30,7 +30,11 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
   },
-  { timestamps: true, versionKey: false }
+  {
+    timestamps: true,
+    versionKey: false,
+  }
 );
-const User = mongoose.model("user", userSchema);
+
+const User = mongoose.model("User", userSchema);
 export default User;

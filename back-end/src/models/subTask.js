@@ -12,7 +12,7 @@ const subTaskSchema = new mongoose.Schema(
       type: [String],
       required: true,
       validate: {
-        validator: (arr) => arr.length > 0,
+        validator: (arr) => Array.isArray(arr) && arr.length > 0,
         message: "At least one description is required",
       },
     },
@@ -30,19 +30,19 @@ const subTaskSchema = new mongoose.Schema(
 
     task: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "task",
+      ref: "Task",
       required: true,
     },
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
       required: true,
     },
 
     assignedTo: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
       default: null,
     },
 
@@ -57,6 +57,6 @@ const subTaskSchema = new mongoose.Schema(
   }
 );
 
-const SubTask = mongoose.model("subtask", subTaskSchema);
+const SubTask = mongoose.model("SubTask", subTaskSchema);
 
 export default SubTask;
