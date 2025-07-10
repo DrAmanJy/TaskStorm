@@ -10,11 +10,13 @@ import { getProjectRequest } from "../services/projectServices";
 const Dashboard = () => {
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [project, setProject] = useState(null);
+  const [totalStats, setTotalStats] = useState(null);
   const getProjects = async () => {
     try {
       const data = await getProjectRequest();
       if (data.success) {
         setProject(data.projects);
+        setTotalStats(data.totalStats);
       } else {
         alert(data.message);
       }
@@ -54,10 +56,14 @@ const Dashboard = () => {
           setShowProjectForm={setShowProjectForm}
         />
 
-        <DashboardInfoCards
-          project={project?.length || 0}
-          setShowProjectForm={setShowProjectForm}
-        />
+        {totalStats && (
+          <DashboardInfoCards
+            project={project?.length || 0}
+            setShowProjectForm={setShowProjectForm}
+            totalTasks={totalStats.totalTasks}
+            totalCompleted={totalStats.totalCompleted}
+          />
+        )}
 
         <section className="mt-16">
           <h3 className="text-2xl font-bold text-white mb-6">

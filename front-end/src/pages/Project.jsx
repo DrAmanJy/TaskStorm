@@ -28,24 +28,6 @@ const Project = () => {
       setProject(res.project);
     }
   };
-  const task = [
-    {
-      name: "Design landing page",
-      status: "in-progress",
-      progress: 50,
-    },
-    { name: "Write marketing copy", status: "pending", progress: 0 },
-    {
-      name: "Launch email campaign",
-      status: "completed",
-      progress: 100,
-    },
-  ];
-  const memberAvatars = [
-    "https://i.pravatar.cc/150?img=3",
-    "https://i.pravatar.cc/150?img=4",
-    "https://i.pravatar.cc/150?img=5",
-  ];
   return (
     project && (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 px-6 py-20">
@@ -136,16 +118,7 @@ const Project = () => {
                     </div>
 
                     <div className="flex items-center justify-between mt-4 text-sm text-gray-300">
-                      <div className="flex -space-x-2">
-                        {memberAvatars.map((avatar, i) => (
-                          <img
-                            key={i}
-                            src={avatar}
-                            alt="member"
-                            className="w-7 h-7 rounded-full border-2 border-gray-800"
-                          />
-                        ))}
-                      </div>
+                      <div className="flex -space-x-2"></div>
                       <Link
                         to={`/task/${task._id}`}
                         className="inline-flex items-center gap-1 px-4 py-1 rounded-full border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-white transition-all"

@@ -72,7 +72,6 @@ const CreateTask = () => {
           Create New Task
         </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Task Fields */}
           <div>
             <label className="block text-sm font-medium text-gray-300">
               Task Name
@@ -101,8 +100,6 @@ const CreateTask = () => {
               </p>
             )}
           </div>
-
-          {/* Subtasks */}
           <div>
             <h3 className="text-lg font-semibold text-cyan-400">Subtasks</h3>
             {subtaskFields.map((subtask, index) => (
@@ -110,7 +107,6 @@ const CreateTask = () => {
                 key={subtask.id}
                 className="p-4 border border-gray-600 rounded-md mb-4"
               >
-                {/* Title */}
                 <input
                   {...register(`subtasks.${index}.title`)}
                   placeholder="Subtask title"
@@ -122,7 +118,6 @@ const CreateTask = () => {
                   </p>
                 )}
 
-                {/* Descriptions */}
                 {subtasks?.[index]?.descriptions?.map((desc, descIndex) => (
                   <input
                     key={descIndex}
@@ -144,8 +139,6 @@ const CreateTask = () => {
                 >
                   + Add another description
                 </button>
-
-                {/* Deadline & Priority */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <input
                     type="date"

@@ -12,13 +12,16 @@ import {
   getTaskById,
   setCompleted,
 } from "../services/subtaskServices";
+import CreateSubtask from "../components/CreateSubtask";
+import { setTaskCompleted } from "../services/taskServices";
 
 const Task = () => {
   const [subtasks, setSubtask] = useState(null);
   const [progress, setProgress] = useState(0);
   const [task, setProject] = useState(0);
+  const [showSubtaskForm, setShowSubtaskForm] = useState(false);
   const { id } = useParams();
-  console.log(task);
+
   useEffect(() => {
     getSubtasks();
     getProject();
@@ -42,8 +45,17 @@ const Task = () => {
   };
 
   const handleComplete = async (completed, id) => {
-    console.log(completed, id);
     const res = await setCompleted(completed, id);
+    if (res.success) {
+      alert(res.message);
+      getSubtasks();
+      getProject();
+    } else {
+      alert(res.message);
+    }
+  };
+  const handleSetCompleted = async () => {
+    const res = await setTaskCompleted(task._id);
     if (res.success) {
       alert(res.message);
       getSubtasks();
@@ -54,15 +66,33 @@ const Task = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white px-6 py-20">
-      <div className="max-w-2xl mx-auto bg-gray-800 rounded-2xl p-8 shadow-xl">
-        <h2 className="text-2xl font-bold text-cyan-400 mb-4">{task.title}</h2>
+    <div
+      className={`${
+        showSubtaskForm ? "h-screen overflow-hidden" : "min-h-screen"
+      } bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100 px-6 py-12`}
+    >
+      <CreateSubtask
+        showSubtaskForm={showSubtaskForm}
+        setShowSubtaskForm={setShowSubtaskForm}
+        refreshFunction={getSubtasks}
+        taskId={task._id}
+      />
 
+      <div className="max-w-2xl mx-auto bg-gray-800 rounded-2xl p-8 shadow-xl relative">
+        {!task.isCompleted && progress === 100 && (
+          <button
+            onClick={handleSetCompleted}
+            className="absolute top-6 right-6 inline-flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold transition"
+          >
+            <CheckCircle2 className="w-4 h-4" />
+            Set Completed
+          </button>
+        )}
+
+        <h2 className="text-2xl font-bold text-cyan-400 mb-4">{task.title}</h2>
         <div className="mb-6">
           <p className="text-gray-300">{task.description}</p>
         </div>
-
-        {/* Progress Bar */}
         <div className="mb-6">
           <div className="flex justify-between items-center mb-1">
             <span className="text-sm font-medium text-gray-300">Progress</span>
@@ -75,8 +105,6 @@ const Task = () => {
             ></div>
           </div>
         </div>
-
-        {/* Priority Filter UI */}
         <div className="mb-6">
           <label
             htmlFor="priorityFilter"
@@ -97,7 +125,10 @@ const Task = () => {
 
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-white">Subtasks</h3>
-          <button className="inline-flex items-center gap-2 bg-cyan-700 hover:bg-cyan-500 text-white px-4 py-2 rounded-full text-sm font-semibold transition">
+          <button
+            onClick={() => setShowSubtaskForm(true)}
+            className="inline-flex items-center gap-2 bg-cyan-700 hover:bg-cyan-500 text-white px-4 py-2 rounded-full text-sm font-semibold transition"
+          >
             <PlusCircle className="w-4 h-4" /> Add Subtask
           </button>
         </div>
