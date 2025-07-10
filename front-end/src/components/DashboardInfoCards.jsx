@@ -1,8 +1,11 @@
 import { FolderPlus, LayoutDashboard, CircleCheckBig } from "lucide-react";
 import NeonCard from "./NeonCard";
-const DashboardInfoCards = ({ setShowProjectForm, project }) => {
-  const task = 30;
-  const completedTask = 12;
+const DashboardInfoCards = ({
+  setShowProjectForm,
+  project,
+  totalCompleted,
+  totalTasks,
+}) => {
   return (
     <section className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
       <NeonCard>
@@ -19,7 +22,7 @@ const DashboardInfoCards = ({ setShowProjectForm, project }) => {
         <CircleCheckBig className="mx-auto mb-4 h-10 w-10 text-cyan-400" />
         <h2 className="text-xl font-semibold text-white">Task Progress</h2>
         <p className="text-gray-400 mt-2">
-          {completedTask} of {task} tasks completed.
+          {totalCompleted} of {totalTasks} tasks completed.
         </p>
       </NeonCard>
       <button onClick={() => setShowProjectForm(true)}>
