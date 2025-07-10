@@ -11,7 +11,8 @@ const ProjectNeonCard = ({ projects }) => {
                 {project.name}
               </h4>
               <p className="text-gray-400 text-sm mb-3">
-                25 tasks • 7 completed
+                {project.taskStats.total} tasks • {project.taskStats.completed}{" "}
+                completed
               </p>
               <p className="text-cyan-400 hover:underline text-sm">
                 View Project
