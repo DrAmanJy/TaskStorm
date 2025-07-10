@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas/userSchema";
 import { useUser } from "../context/UserContext";
 import { Link, useNavigate } from "react-router";
+import { useEffect } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,9 +13,13 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(loginSchema), mode: "onTouched" });
   const { user, login, loading, error } = useUser();
-  if (user) {
-    navigate("/dashboard");
-  }
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
+  if (user) return null;
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-gray-800 p-8 rounded-xl shadow-md">
