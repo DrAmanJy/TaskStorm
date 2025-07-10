@@ -1,12 +1,55 @@
 import Project from "../models/Project.js";
+import Task from "../models/Task.js";
 import User from "../models/User.js";
 
 export const getProject = async (req, res) => {
-  const projects = await Project.find({ owner: req.user._id });
-  if (projects.length === 0) {
-    return res.status(404).json({ message: "project not found" });
+  const userId = req.user._id;
+
+  const projects = await Project.find({
+    $or: [{ owner: userId }, { members: { $in: [userId] } }],
+  });
+
+  if (!projects.length) {
+    return res.status(404).json({ message: "No projects found" });
   }
-  res.json({ success: true, projects });
+
+  let totalTasks = 0;
+  let totalCompleted = 0;
+
+  const enrichedProjects = [];
+
+  for (const project of projects) {
+    const tasks = await Task.find({ project: project._id });
+
+    const projectTaskCount = tasks.length;
+    const completedTaskCount = tasks.filter((t) => t.isCompleted).length;
+
+    totalTasks += projectTaskCount;
+    totalCompleted += completedTaskCount;
+
+    enrichedProjects.push({
+      _id: project._id,
+      name: project.name,
+      description: project.description,
+      owner: project.owner,
+      members: project.members,
+      createdAt: project.createdAt,
+      updatedAt: project.updatedAt,
+      taskStats: {
+        total: projectTaskCount,
+        completed: completedTaskCount,
+      },
+    });
+  }
+
+  res.json({
+    success: true,
+    totalStats: {
+      totalTasks,
+      totalCompleted,
+    },
+    projects: enrichedProjects,
+  });
 };
 export const getProjectById = async (req, res) => {
   const project = await Project.findById(req.params.id);
