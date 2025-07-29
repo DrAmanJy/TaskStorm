@@ -25,7 +25,7 @@ export const signup = async (req, res) => {
     .cookie("token", token, {
       httpOnly: true,
       secure: nodeEnv === "production",
-      sameSite: "lax",
+      sameSite: "None",
       maxAge: 10 * 24 * 60 * 60 * 1000,
       signed: true,
     })
@@ -55,7 +55,7 @@ export const login = async (req, res) => {
   res
     .cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "None",
       secure: nodeEnv === "production",
       maxAge: 24 * 60 * 60 * 1000,
       signed: true,
